@@ -3,12 +3,12 @@ import { PORT, DBURL, CORS_ORIGINS } from "./config";
 import cors from "cors";
 import bodyParser from "body-parser";
 import mongoose from "mongoose";
-import { router as favoriteRouter } from "./routes/favorite.router";
-import { router as profileRouter } from "./routes/profile.router";
-import { router as simulatorRouter } from "./routes/simulator.router";
+import { router as favoriteRouter } from "./routes/favorite/favorite.router";
+import { router as profileRouter } from "./routes/profile/profile.router";
+import { router as simulatorRouter } from "./routes/simulator/simulator.router";
 
 (async () => {
-  await mongoose.connect(`${DBURL}`, {
+  const db = await mongoose.connect(`${DBURL}`, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   });
@@ -22,7 +22,15 @@ import { router as simulatorRouter } from "./routes/simulator.router";
   app.use(profileRouter);
   app.use(simulatorRouter);
 
-  app.listen(PORT, () =>
+  const httpServer = app.listen(PORT, () =>
     console.log(`✅  Ready on port http://localhost:${PORT}`),
   );
+
+  process.on("SIGTERM", () => {
+    httpServer.close();
+    db.disconnect();
+
+    console.log("Shut down gracefully.");
+    process.exit(0);
+  });
 })();
