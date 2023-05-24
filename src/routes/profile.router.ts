@@ -1,16 +1,15 @@
 import express from "express";
 import { Profile } from "../models/Profile";
 
-export var router = express.Router();
+export const router = express.Router();
 
 router.get("/api/profile", async (req, res) => {
-  var profile = await Profile.find().lean();
-  console.log(profile);
+  const profile = await Profile.find().lean();
   res.json({ profile });
 });
 
 router.post("/api/profile", async (req, res) => {
-  var { email, name, nickname } = req.body;
+  const { email, name, nickname } = req.body;
 
   let profile = await Profile.findOne({
     $or: [{ email }, { nickname }],
