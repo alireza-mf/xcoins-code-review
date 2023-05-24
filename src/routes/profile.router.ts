@@ -1,11 +1,12 @@
 import express from "express";
 import { Profile } from "../models/Profile";
+import { responseSuccess, responseUnSuccess } from "../utils";
 
 export const router = express.Router();
 
 router.get("/api/profile", async (req, res) => {
   const profile = await Profile.find().lean();
-  res.json({ profile });
+  return responseSuccess(res, { profile }, 200);
 });
 
 router.post("/api/profile", async (req, res) => {
@@ -15,9 +16,11 @@ router.post("/api/profile", async (req, res) => {
     $or: [{ email }, { nickname }],
   }).exec();
 
-  if (!profile) {
-    profile = await Profile.create({ name, email, nickname });
+  if (profile) {
+    return responseUnSuccess(res, "Profile already existed.", 400);
   }
 
-  res.json(profile);
+  profile = await Profile.create({ name, email, nickname });
+
+  return responseSuccess(res, { profile }, 201);
 });
