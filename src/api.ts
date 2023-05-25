@@ -3,9 +3,8 @@ import { PORT, DBURL, CORS_ORIGINS } from "./config";
 import cors from "cors";
 import bodyParser from "body-parser";
 import mongoose from "mongoose";
-import { router as favoriteRouter } from "./routes/favorite/favorite.router";
-import { router as profileRouter } from "./routes/profile/profile.router";
-import { router as simulatorRouter } from "./routes/simulator/simulator.router";
+import { router } from "./routes";
+import { errorHandler } from "./middlewares/errorHandler";
 
 (async () => {
   const db = await mongoose.connect(`${DBURL}`, {
@@ -18,9 +17,9 @@ import { router as simulatorRouter } from "./routes/simulator/simulator.router";
   app.use(cors({ origin: CORS_ORIGINS }));
   app.use(bodyParser.urlencoded({ extended: false }));
   app.use(bodyParser.json());
-  app.use(favoriteRouter);
-  app.use(profileRouter);
-  app.use(simulatorRouter);
+  app.use(errorHandler);
+
+  app.use("/api", router);
 
   const httpServer = app.listen(PORT, () =>
     console.log(`✅  Ready on port http://localhost:${PORT}`),

@@ -1,15 +1,12 @@
-import express from "express";
-import { Profile } from "../models/Profile";
-import { responseSuccess, responseUnSuccess } from "../utils";
+import { Profile } from "../../../models/Profile";
+import { responseSuccess, responseUnSuccess } from "../../../utils";
 
-export const router = express.Router();
-
-router.get("/api/profile", async (req, res) => {
+export const getProfiles = (async (req, res) => {
   const profile = await Profile.find().lean();
   return responseSuccess(res, { profile }, 200);
 });
 
-router.post("/api/profile", async (req, res) => {
+export const createProfile = (async (req, res) => {
   const { email, name, nickname } = req.body;
 
   let profile = await Profile.findOne({
