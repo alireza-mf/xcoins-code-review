@@ -6,7 +6,7 @@ import mongoose from "mongoose";
 import { router } from "./routes";
 import { errorHandler } from "./middlewares/errorHandler";
 
-(async () => {
+export const app = async () => {
   const db = await mongoose.connect(`${DBURL}`, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
@@ -32,4 +32,8 @@ import { errorHandler } from "./middlewares/errorHandler";
     console.log("Shut down gracefully.");
     process.exit(0);
   });
-})();
+
+  return app;
+};
+
+app();

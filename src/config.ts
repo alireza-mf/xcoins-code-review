@@ -4,7 +4,7 @@ import dotenv from "dotenv";
 dotenv.config();
 
 const checkEnv = (envVar: string, defaultValue?: string) => {
-  if (!process.env[envVar]) {
+  if (process.env[envVar] === undefined && process.env[envVar] === "") {
     if (defaultValue) {
       return defaultValue;
     }
