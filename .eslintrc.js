@@ -17,6 +17,16 @@ module.exports = {
     "@typescript-eslint/explicit-function-return-type": "off",
     "@typescript-eslint/explicit-module-boundary-types": "off",
     "@typescript-eslint/no-explicit-any": "off",
+    "@typescript-eslint/ban-types": [
+      "error",
+      {
+        extendDefaults: true,
+        types: {
+          "{}": false,
+          Object: false,
+        },
+      },
+    ],
     "dot-location": [ "error", "property" ],
     "arrow-spacing": [
       "error",

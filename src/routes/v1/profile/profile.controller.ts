@@ -1,12 +1,13 @@
+import { HttpStatus, ICreateProfileApi, IGetProfilesApi } from "../../../interfaces";
 import { Profile } from "../../../models/Profile";
 import { responseSuccess, responseUnSuccess } from "../../../utils";
 
-export const getProfiles = (async (req, res) => {
+export const getProfiles = <IGetProfilesApi>(async (req, res) => {
   const profile = await Profile.find().lean();
-  return responseSuccess(res, { profile }, 200);
+  return responseSuccess(res, { profile }, HttpStatus.SUCCESS);
 });
 
-export const createProfile = (async (req, res) => {
+export const createProfile = <ICreateProfileApi>(async (req, res) => {
   const { email, name, nickname } = req.body;
 
   let profile = await Profile.findOne({
@@ -19,5 +20,5 @@ export const createProfile = (async (req, res) => {
 
   profile = await Profile.create({ name, email, nickname });
 
-  return responseSuccess(res, { profile }, 201);
+  return responseSuccess(res, { profile }, HttpStatus.CREATED);
 });
